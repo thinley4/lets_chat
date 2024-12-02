@@ -1,40 +1,27 @@
-import express from "express";
-import { createServer } from "node:http";
-import { fileURLToPath } from "node:url";
-import { dirname, join } from "node:path";
-import { Server } from "socket.io";
+const express = require('express');
+const cors = require('cors');
+const mongoose = require('mongoose');
+const userRoute = require('./Routes/userRoute');
+
+require('dotenv').config();
+const port = process.env.PORT || 3000;
+
 
 const app = express();
-const server = createServer(app);
-const io = new Server(server, {
-  cors: {
-    origin: "*",
-  }
+
+app.use(cors());
+app.use(express.json());
+app.use('/api/users', userRoute);
+
+
+app.get('/', (req, res) => {
+    res.send('Hello World!');
 })
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-
-// app.get("/", (req, res) => {
-//   res.sendFile(join(__dirname, "index.html"));
-// });
-
-io.on("connection", (socket) => {
-  socket.on("foo", (msg) => {
-    io.emit("foo", msg);
-  });
+app.listen(port, () => {
+    console.log(`Server is running on port: ${port}`);
 });
 
-// io.on("connection", (socket) => {
-//   socket.on("private_message", (content, to) => {
-//     socket.to(to).emit("private_message", {
-//       content,
-//       from: socket.id,
-//     });
-//     console.log("hey from server");
-    
-//   });
-// });
-
-server.listen(3000, () => {
-  console.log("server running at http://localhost:3000");
-});
+mongoose.connect(process.env.MongoURI).then(() => {
+    console.log('Connected to the Database successfully');
+}).catch(err => console.log(err));
