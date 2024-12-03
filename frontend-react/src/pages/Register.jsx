@@ -2,12 +2,17 @@ import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 
 export function Register() {
-  
-  const { registerInfo, updateRegisterInfo} = useContext(AuthContext);
+  const {
+    registerInfo,
+    updateRegisterInfo,
+    registerUser,
+    registerError,
+    isRegisterLoading,
+  } = useContext(AuthContext);
 
   return (
     <div className="flex justify-center items-center h-screen bg-slate-600">
-      <form className="max-w-sm mx-auto bg-blue-900 p-5 rounded-xl">
+      <form onSubmit={registerUser} className="max-w-sm mx-auto bg-blue-900 p-5 rounded-xl">
         <div className="mb-5">
           <label
             htmlFor="name"
@@ -16,6 +21,9 @@ export function Register() {
             Your name
           </label>
           <input
+            onChange={(e) =>
+              updateRegisterInfo({ ...registerInfo, name: e.target.value })
+            }
             type="name"
             id="name"
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -31,6 +39,9 @@ export function Register() {
             Your email
           </label>
           <input
+            onChange={(e) =>
+              updateRegisterInfo({ ...registerInfo, email: e.target.value })
+            }
             type="email"
             id="email"
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -46,6 +57,9 @@ export function Register() {
             Your password
           </label>
           <input
+            onChange={(e) =>
+              updateRegisterInfo({ ...registerInfo, password: e.target.value })
+            }
             type="password"
             id="password"
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -56,8 +70,16 @@ export function Register() {
           type="submit"
           className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         >
-          Submit
+          {
+            isRegisterLoading ? "Loading..." : "Register"
+          }
         </button>
+        {
+          registerError && (
+            <div className="text-red-500 text-sm mt-2">
+              {registerError.message}
+            </div>
+        )}
       </form>
     </div>
   );
