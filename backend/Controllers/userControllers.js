@@ -42,4 +42,42 @@ const registerUser = async( req, res ) => {
     }
 }
 
-module.exports = {registerUser};
+const loginUser = async( req, res ) => {
+    try {
+        const {email, password} = req.body;
+    
+        let user = await userModel.findOne({email});
+        if(!user){
+            return res.status(400).json({message: 'Invalid email or password'});
+        }
+        const isMatch = await bcrypt.compare(password, user.password);
+        if(!isMatch){
+            return res.status(400).json({message: 'Invalid email or password'});
+        }
+        const token = createToken(user._id);
+        res.status(200).json({_id: user._id, name: user.name, email: user.email, token});
+    } catch(err){
+        res.status(500).json({message: err.message});
+    }
+}
+
+const findUser = async( req, res ) => {
+    try {
+        const userId = req.params.userId;        
+        const user = await userModel.findById(userId);
+        res.status(200).json(user);
+    } catch(err){
+        res.status(500).json({message: err.message});
+    }
+}   
+
+const getUsers = async (req, res) => {
+    try {
+        const users = await userModel.find();
+        res.status(200).json(users);
+    } catch(err){
+        res.status(500).json({message: err.message});
+    }
+}
+
+module.exports = {registerUser, loginUser, findUser, getUsers};
