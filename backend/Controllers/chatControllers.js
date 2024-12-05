@@ -25,7 +25,7 @@ const createChat = async (req, res) => {
 }
 
 // Get a chat history of one user with others
-// Get one user conversation with other user
+// Get one user conversation with other users
 
 const findUserChats = async (req, res) => {
     const {userId} = req.params;

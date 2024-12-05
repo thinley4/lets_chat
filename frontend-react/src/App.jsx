@@ -5,11 +5,12 @@ import {Login} from "./pages/Login";
 import Navbar from "./components/Navbar";
 import { AuthContext } from "./context/AuthContext";
 import { useContext } from "react";
+import { ChatContextProvider } from "./context/ChatContext";
 
 export default function App() {
   const {user} = useContext(AuthContext);
   return (
-    <>
+    <ChatContextProvider user={user}>
     <Navbar />
       <BrowserRouter>
         <Routes>
@@ -19,6 +20,6 @@ export default function App() {
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </BrowserRouter>
-    </>
+    </ChatContextProvider>
   );
 }
