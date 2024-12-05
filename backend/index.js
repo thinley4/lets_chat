@@ -3,6 +3,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const userRoute = require('./Routes/userRoute');
 const chatRoute = require('./Routes/chatRoute');
+const messageRouter = require('./Routes/messageRoute');
 
 require('dotenv').config();
 const port = process.env.PORT || 3000;
@@ -14,6 +15,7 @@ app.use(cors());
 app.use(express.json());
 app.use('/api/users', userRoute);
 app.use('/api/chats', chatRoute);
+app.use('/api/messages', messageRouter);
 
 
 app.get('/', (req, res) => {
