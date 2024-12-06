@@ -11,7 +11,17 @@ const Navbar = () => {
             Chat
           </a>
         </div>
-        <div>{user ? <div>Welcome {user.name}</div> : <div></div>}</div>
+        <div>
+          {user ? (
+            <div>Welcome{" "}
+              {
+                user.name.charAt(0).toUpperCase() + user.name.slice(1)
+              }
+            </div>
+          ) : (
+            <div></div>
+          )}
+        </div>
         <div>
           {user ? (
             <button onClick={logout} className="text-white ml-4">

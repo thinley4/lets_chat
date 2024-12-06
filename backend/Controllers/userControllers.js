@@ -61,6 +61,8 @@ const loginUser = async( req, res ) => {
     }
 }
 
+// Get a user by id
+
 const findUser = async( req, res ) => {
     try {
         const userId = req.params.userId;        
@@ -70,6 +72,8 @@ const findUser = async( req, res ) => {
         res.status(500).json({message: err.message});
     }
 }   
+
+// Get all users
 
 const getUsers = async (req, res) => {
     try {

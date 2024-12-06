@@ -4,6 +4,8 @@ const chatModel = require('../Models/chatModel');
 // get all users
 // find chat
 
+
+// Create a chat between two users
 const createChat = async (req, res) => {
     const {firstId, secondId} = req.body;
     try {
@@ -24,7 +26,7 @@ const createChat = async (req, res) => {
     }
 }
 
-// Chat of one user with other users
+// Get chat of one user with other users
 
 const findUserChats = async (req, res) => {
     const {userId} = req.params;
@@ -39,6 +41,7 @@ const findUserChats = async (req, res) => {
     }
 }
 
+// Find chat between two users
 const findChat = async (req, res) => {
     const {firstId, secondId} = req.params;
     try {
