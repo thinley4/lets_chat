@@ -5,7 +5,6 @@ import { AuthContext } from "../../context/AuthContext";
 const PotentialChat = () => {
   const { user } = useContext(AuthContext);
   const { potentialChats, createChat } = useContext(ChatContext);
-  console.log("Potential Chats", potentialChats);
 
   return (
     <div>
@@ -15,7 +14,7 @@ const PotentialChat = () => {
             <button
               onClick={() => createChat(user._id, chat._id)}
               key={chat._id}
-              className="relative p-2 bg-blue-700 rounded-lg"
+              className="relative p-2 bg-blue-700 rounded-lg hover:bg-blue-800"
             >
               <div>{chat.name}</div>
               <div className="absolute top-0 right-0">

@@ -8,6 +8,13 @@ export const ChatContextProvider = ({ children, user }) => {
   const [isUserChatsLoading, setIsUserChatsLoading] = useState(false);
   const [userChatsError, setUserChatsError] = useState(null);
   const [potentialChats, setPotentialChats] = useState(null);
+  const [currentChat, setCurrentChat] = useState(null);
+  const [messages, setMessages] = useState();
+  const [isMessagesLoading, setIsMessagesLoading] = useState(false);  
+  const [messagesError, setMessagesError] = useState(null);
+  
+  console.log("Messages ",messages);
+  
 
   // Get all users except the user itself and the users with whom the user has already chatted
   useEffect(() => {
@@ -62,6 +69,32 @@ export const ChatContextProvider = ({ children, user }) => {
     getUserChats();
   }, [user]);
 
+  useEffect(() => {
+    const getMessage = async () => {
+      setIsMessagesLoading(true);
+      setMessagesError(null);
+
+      const response = await getRequest(`${baseUrl}/messages/${currentChat?._id}`);
+
+      setIsMessagesLoading(false);
+
+      if(response.error){
+        return setMessagesError(response);
+      }
+
+      setMessages(response);
+    };
+
+    getMessage();
+  },[currentChat]);
+
+  // Update current chat
+
+  const updateCurrentChat = useCallback((chat) => {
+    setCurrentChat(chat);
+  },[]);
+
+
   const createChat = useCallback(async (firstId, secondId) => {
     const response = await postRequest(
       `${baseUrl}/chats`,
@@ -82,6 +115,10 @@ export const ChatContextProvider = ({ children, user }) => {
         userChatsError,
         potentialChats,
         createChat,
+        updateCurrentChat,
+        currentChat,
+        messages,
+        isMessagesLoading,
       }}
     >
       {children}

@@ -3,10 +3,11 @@ import { ChatContext } from "../context/ChatContext";
 import { AuthContext } from "../context/AuthContext";
 import { UserChat } from "../components/chat/UserChat";
 import PotentialChat from "../components/chat/PotentialChat";
+import { ChatBox } from "../components/chat/ChatBox";
 
 export function Chat() {
   const { user } = useContext(AuthContext);
-  const { userChats, isUserChatsLoading, userChatsError } =
+  const { userChats, isUserChatsLoading, userChatsError, updateCurrentChat } =
     useContext(ChatContext);
 
   if (isUserChatsLoading) {
@@ -28,14 +29,14 @@ export function Chat() {
         {userChats?.length < 1 ? null : (
           <div>
             {userChats.map((chat) => (
-              <div key={chat._id} className="mb-5">
+              <div onClick={() => updateCurrentChat(chat)} key={chat._id} className="mb-5">
                 <UserChat chat={chat} user={user} />
               </div>
             ))}
           </div>
         )}
       </div>
-      <div>chat</div>
+      <ChatBox />
     </div>
   );
 }
