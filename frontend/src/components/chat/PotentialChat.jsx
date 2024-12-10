@@ -4,7 +4,7 @@ import { AuthContext } from "../../context/AuthContext";
 
 const PotentialChat = () => {
   const { user } = useContext(AuthContext);
-  const { potentialChats, createChat } = useContext(ChatContext);
+  const { potentialChats, createChat, onlineUsers } = useContext(ChatContext);
 
   return (
     <div>
@@ -17,9 +17,11 @@ const PotentialChat = () => {
               className="relative p-2 bg-blue-700 rounded-lg hover:bg-blue-800"
             >
               <div>{chat.name}</div>
-              <div className="absolute top-0 right-0">
-                <div className="bg-green-500 w-3 h-3 rounded"></div>
-              </div>
+              {onlineUsers.some((user) => user.userId === chat._id) && (
+                <div className="absolute top-0 right-0">
+                  <div className="bg-green-500 w-3 h-3 rounded"></div>
+                </div>
+              )}
             </button>
           ))}
         </div>
