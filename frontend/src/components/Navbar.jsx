@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
+import {Notification} from "./chat/Notification";
 
 const Navbar = () => {
   const { user, logout } = useContext(AuthContext);
@@ -24,9 +25,12 @@ const Navbar = () => {
         </div>
         <div>
           {user ? (
+            <div className="flex items-center">
+              <Notification />
             <button onClick={logout} className="text-white ml-4">
               Logout
             </button>
+            </div>
           ) : (
             <>
               <a href="/login" className="text-white">

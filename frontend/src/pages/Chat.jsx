@@ -27,7 +27,7 @@ export function Chat() {
       <div className="col-span-1">
         <PotentialChat />
         {userChats?.length < 1 ? null : (
-          <div>
+          <div className="">
             {userChats.map((chat) => (
               <div onClick={() => updateCurrentChat(chat)} key={chat._id} className="mb-5">
                 <UserChat chat={chat} user={user} />

@@ -36,11 +36,11 @@ export function ChatBox() {
   };
 
   return (
-    <div className="col-span-2 bg-gray-100 rounded-t-lg flex flex-col">
+    <div className="col-span-2 bg-gray-100 rounded-t-lg flex flex-col h-full">
       <div className="flex justify-center bg-black text-white p-3 rounded-t-lg">
         {recipientUser?.name}
       </div>
-      <div className="relative h-full">
+      <div className="flex-grow flex flex-col">
         <div className="p-4 flex flex-col gap-4 overflow-y-auto h-[28rem]">
           {messages?.map((message, index) => (
             <div
@@ -66,7 +66,7 @@ export function ChatBox() {
             e.preventDefault();
             sendTextMessage(textMessage, user, currentChat._id, setTextMessage);
           }}
-          className="absolute bottom-0 w-full flex p-4 items-center bg-gray-200 rounded-b-lg"
+          className="flex p-4 items-center bg-gray-200 rounded-b-lg"
         >
           <InputEmoji
             borderColor="rgb(156 163 175)"
