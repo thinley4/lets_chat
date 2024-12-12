@@ -7,12 +7,13 @@ import { useRef } from "react";
 
 export function Notification() {
   const [isOpen, setIsOpen] = useState(false);
-  const { notification, allUsers, userChats } = useContext(ChatContext);
+  const { notification, allUsers, userChats, markAllNotificationsAsRead } =
+    useContext(ChatContext);
   const notificationRef = useRef(null);
 
   const unreadNotifications = unreadNotificationFunc(notification);
 
-  const modifiedUnreadNotifications = unreadNotifications.map((n) => {
+  const modifiedUnreadNotifications = notification.map((n) => {
     // helper to find the name of the sender
     const sender = allUsers.find((u) => u._id === n.senderId);
     return {
@@ -36,9 +37,6 @@ export function Notification() {
     };
   }, []);
 
-  console.log("unreadNotifications", unreadNotifications);
-  console.log("modifiedUnreadNotifications", modifiedUnreadNotifications);
-
   return (
     <div ref={notificationRef} className="relative z-50">
       <button
@@ -56,7 +54,10 @@ export function Notification() {
         <div className="absolute right-0 z-50 mt-2 w-64 bg-white text-black border border-gray-200 rounded-lg shadow-lg">
           <div className="flex justify-between items-center p-4 border-b">
             <div className="font-semibold">Notifications</div>
-            <button className="text-blue-500 hover:underline">
+            <button
+              onClick={() => markAllNotificationsAsRead(notification)}
+              className="text-blue-500 hover:underline"
+            >
               Mark all as read
             </button>
           </div>
@@ -69,7 +70,7 @@ export function Notification() {
               modifiedUnreadNotifications.map((n) => (
                 <div
                   key={n.senderId}
-                  className={`p-4 border-b ${n.isRead ? "" : "bg-gray-100"}`}
+                  className={`p-4 border-b ${n.isRead ? "bg-gray-100" : "bg-white"}`}
                 >
                   <div className="font-medium">From: {n.senderName}</div>
                   <div className="text-sm text-gray-600">

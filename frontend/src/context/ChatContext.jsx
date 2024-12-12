@@ -1,7 +1,6 @@
 import { createContext, useCallback, useEffect, useState } from "react";
 import { baseUrl, getRequest, postRequest } from "../utils/services";
 import { io } from "socket.io-client";
-import { use } from "react";
 
 export const ChatContext = createContext();
 
@@ -216,6 +215,17 @@ export const ChatContextProvider = ({ children, user }) => {
     setUserChats((prev) => [...prev, response]);
   }, []);
 
+  const markAllNotificationsAsRead = useCallback((notifications) => {
+    const mNotifications = notifications.map((n) => {
+      return {
+        ...n,
+        isRead: true,
+      }
+    })
+
+    setNotification(mNotifications);
+  },[]);
+
   return (
     <ChatContext.Provider
       value={{
@@ -232,6 +242,7 @@ export const ChatContextProvider = ({ children, user }) => {
         onlineUsers,
         notification,
         allUsers,
+        markAllNotificationsAsRead,
       }}
     >
       {children}
