@@ -2,12 +2,14 @@ import { Bell } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
 import { unreadNotificationFunc } from "../../utils/unreadNotificationFunc";
 import { ChatContext } from "../../context/ChatContext";
+import {AuthContext} from "../../context/AuthContext";
 import moment from "moment";
 import { useRef } from "react";
 
 export function Notification() {
   const [isOpen, setIsOpen] = useState(false);
-  const { notification, allUsers, userChats, markAllNotificationsAsRead } =
+  const {user} = useContext(AuthContext);
+  const { notification, allUsers, userChats, markAllNotificationsAsRead, markNotificationAsRead } =
     useContext(ChatContext);
   const notificationRef = useRef(null);
 
@@ -68,9 +70,14 @@ export function Notification() {
               </div>
             ) : (
               modifiedUnreadNotifications.map((n) => (
-                <div
+                <button
                   key={n.senderId}
-                  className={`p-4 border-b ${n.isRead ? "bg-gray-100" : "bg-white"}`}
+                  className={`p-4 w-full border-b ${n.isRead ? "bg-gray-100" : "bg-white"}`}
+                  onClick={() => {
+                    markNotificationAsRead(n, userChats, user, notification);
+                    setIsOpen(false);
+                  }}
+                      
                 >
                   <div className="font-medium">From: {n.senderName}</div>
                   <div className="text-sm text-gray-600">
@@ -79,7 +86,7 @@ export function Notification() {
                   <div className="text-xs text-gray-400">
                     {moment(n.date).calendar()}
                   </div>
-                </div>
+                </button>
               ))
             )}
           </div>

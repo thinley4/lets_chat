@@ -21,31 +21,30 @@ export const ChatContextProvider = ({ children, user }) => {
   const [allUsers, setAllUsers] = useState([]);
 
   console.log("Nofication", notification);
-  
 
   // Initial socket connection
 
   useEffect(() => {
     const newSocket = io("http://localhost:5000");
     console.log("newsocket", newSocket);
-    
+
     setSocket(newSocket);
 
-    // useEffect(setup, dependencies?) 
+    // useEffect(setup, dependencies?)
 
-    // After every re-render with changed dependencies, 
-    // React will first run the cleanup function (if you provided it) 
-    // with the old values, and then run your setup function with the new values. 
+    // After every re-render with changed dependencies,
+    // React will first run the cleanup function (if you provided it)
+    // with the old values, and then run your setup function with the new values.
     // After your component is removed from the DOM, React will run your cleanup function.
 
     return () => {
       newSocket.disconnect();
-    }
+    };
   }, [user]);
 
   // Add online users
   useEffect(() => {
-    if(socket === null) return;
+    if (socket === null) return;
     socket.emit("addNewUser", user?._id);
 
     socket.on("getOnlineUsers", (res) => {
@@ -54,34 +53,33 @@ export const ChatContextProvider = ({ children, user }) => {
 
     return () => {
       socket.off("getOnlineUsers");
-    }
-
-  },[socket]);
+    };
+  }, [socket]);
 
   // send Message
-  
+
   useEffect(() => {
-    if(socket === null) return;
+    if (socket === null) return;
     const recipientId = currentChat?.members.find((id) => id !== user?._id);
-    socket.emit("sendMessage", {...newMessage, recipientId});
-  },[newMessage]);
+    socket.emit("sendMessage", { ...newMessage, recipientId });
+  }, [newMessage]);
 
   // receive message and notification
 
   useEffect(() => {
-    if(socket === null) return;
+    if (socket === null) return;
 
-    socket.on("getMessage", (res) => {  
-      if(currentChat?._id !== res.chatId) return;
+    socket.on("getMessage", (res) => {
+      if (currentChat?._id !== res.chatId) return;
 
       setMessages((prev) => [...prev, res]);
     });
 
     socket.on("getNotification", (res) => {
-      const isChatOpen = currentChat?.members.some(id => id === res.senderId);
+      const isChatOpen = currentChat?.members.some((id) => id === res.senderId);
 
-      if(isChatOpen){
-        setNotification((prev) => [{...res, isRead: true}, ...prev]);
+      if (isChatOpen) {
+        setNotification((prev) => [{ ...res, isRead: true }, ...prev]);
       } else {
         setNotification((prev) => [res, ...prev]);
       }
@@ -90,8 +88,8 @@ export const ChatContextProvider = ({ children, user }) => {
     return () => {
       socket.off("getMessage");
       socket.off("getNotification");
-    }
-  },[socket, currentChat]);
+    };
+  }, [socket, currentChat]);
 
   // Get all users except the user itself and the users with whom the user has already chatted
   useEffect(() => {
@@ -220,11 +218,38 @@ export const ChatContextProvider = ({ children, user }) => {
       return {
         ...n,
         isRead: true,
-      }
-    })
+      };
+    });
 
     setNotification(mNotifications);
-  },[]);
+  }, []);
+
+  const markNotificationAsRead = useCallback(
+    (n, userChats, user, notifications) => {
+      // find chat to open
+
+      const desiredChat = userChats.find((chat) => {
+        const chatMembers = [user._id, n.senderId];
+        const isDesiredChat = chat?.members.every((member) => {
+          return chatMembers.includes(member);
+        });
+
+        return isDesiredChat;
+      });
+
+      // mark notification as read
+      const mNotifications = notifications.map((el) => {
+        if (n.secondId == el.secondId) {
+          return { ...n, isRead: true };
+        } else {
+          return el;
+        }
+      });
+      updateCurrentChat(desiredChat);
+      setNotification(mNotifications);
+    },
+    []
+  );
 
   return (
     <ChatContext.Provider
@@ -243,6 +268,7 @@ export const ChatContextProvider = ({ children, user }) => {
         notification,
         allUsers,
         markAllNotificationsAsRead,
+        markNotificationAsRead
       }}
     >
       {children}

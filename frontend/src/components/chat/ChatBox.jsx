@@ -36,12 +36,12 @@ export function ChatBox() {
   };
 
   return (
-    <div className="col-span-2 bg-gray-100 rounded-t-lg flex flex-col h-full">
+    <div className="col-span-2 bg-gray-100 rounded-t-lg flex flex-col h-[550px]">
       <div className="flex justify-center bg-black text-white p-3 rounded-t-lg">
         {recipientUser?.name}
       </div>
-      <div className="flex-grow flex flex-col">
-        <div className="p-4 flex flex-col gap-4 overflow-y-auto h-[28rem]">
+      <div className=" flex flex-col">
+        <div className="p-4 flex h-[450px] flex-col gap-4 overflow-y-auto">
           {messages?.map((message, index) => (
             <div
               ref={scroll}
