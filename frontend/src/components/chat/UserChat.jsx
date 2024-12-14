@@ -2,16 +2,25 @@ import { useFetchRecipient } from "../../hooks/useFetchRecipient";
 import avatar from "../../assets/avatar.jpg";
 import { useContext } from "react";
 import { ChatContext } from "../../context/ChatContext";
+import { unreadNotificationFunc } from "../../utils/unreadNotificationFunc";
 
 export function UserChat({ chat, user }) {
   const { recipientUser } = useFetchRecipient(chat, user);
-  const { onlineUsers } = useContext(ChatContext);
+  const { onlineUsers, notification, markThisUserNotificationsAsRead, updateCurrentChat } = useContext(ChatContext);
 
-  // console.log(recipientUser);
+  const unreadNotifications = unreadNotificationFunc(notification);
+
+  const thisChatNotifications = unreadNotifications.filter((n) => {
+    return n.senderId === recipientUser?._id;
+  });
 
   return (
     <>
-      <button className="w-full flex items-center justify-between ">
+      <button onClick={() => {
+        if(thisChatNotifications.length === 0) return;
+        markThisUserNotificationsAsRead(thisChatNotifications, notification);
+        updateCurrentChat(chat);
+      }} className="w-full flex items-center justify-between ">
         <div className="flex items-center gap-2">
           <img src={avatar} alt="avatar" className="w-10 h-10 rounded-full" />
           <div>
@@ -27,7 +36,11 @@ export function UserChat({ chat, user }) {
           )}
           <div>07/10/2024</div>
           <div className="flex justify-end">
-            <div className="p-3 rounded-full bg-blue-600 w-4 h-4 text-white text-xs flex items-center justify-center">2</div>
+            {thisChatNotifications.length === 0 ? null : (
+              <div className="p-3 rounded-full bg-blue-600 w-4 h-4 text-white text-xs flex items-center justify-center">
+                {thisChatNotifications.length}
+              </div>
+            )}
           </div>
         </div>
       </button>
