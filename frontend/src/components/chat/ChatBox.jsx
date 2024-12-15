@@ -18,7 +18,6 @@ export function ChatBox() {
     scroll.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  console.log("text messages", textMessage);
 
   if (!recipientUser) {
     return <div>No conversation</div>;
@@ -34,6 +33,7 @@ export function ChatBox() {
       sendTextMessage(textMessage, user, currentChat._id, setTextMessage);
     }
   };
+  
 
   return (
     <div className="col-span-2 bg-gray-100 rounded-t-lg flex flex-col h-[550px]">

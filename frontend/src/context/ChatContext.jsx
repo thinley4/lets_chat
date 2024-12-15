@@ -290,7 +290,8 @@ export const ChatContextProvider = ({ children, user }) => {
         allUsers,
         markAllNotificationsAsRead,
         markNotificationAsRead,
-        markThisUserNotificationsAsRead
+        markThisUserNotificationsAsRead,
+        newMessage,
       }}
     >
       {children}
