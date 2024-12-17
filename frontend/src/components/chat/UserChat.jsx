@@ -15,8 +15,6 @@ export function UserChat({ chat, user }) {
   const thisChatNotifications = unreadNotifications.filter((n) => {
     return n.senderId === recipientUser?._id;
   });
-
-  console.log("latestMessage", latestMessage);
   
   function shorternText(text) {
     if (text.length > 20) {

@@ -20,8 +20,6 @@ export const ChatContextProvider = ({ children, user }) => {
   const [notification, setNotification] = useState([]);
   const [allUsers, setAllUsers] = useState([]);
 
-  console.log("Nofication", notification);
-
   // Initial socket connection
 
   useEffect(() => {
@@ -71,8 +69,9 @@ export const ChatContextProvider = ({ children, user }) => {
 
     socket.on("getMessage", (res) => {
       if (currentChat?._id !== res.chatId) return;
-
+      
       setMessages((prev) => [...prev, res]);
+      
     });
 
     socket.on("getNotification", (res) => {

@@ -7,7 +7,7 @@ const PotentialChat = () => {
   const { potentialChats, createChat, onlineUsers } = useContext(ChatContext);
 
   return (
-    <div>
+    <div className="overflow-x-auto pt-3">
       {potentialChats?.length < 1 ? null : (
         <div className="flex gap-2">
           {potentialChats.map((chat) => (
