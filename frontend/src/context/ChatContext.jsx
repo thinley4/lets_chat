@@ -20,6 +20,9 @@ export const ChatContextProvider = ({ children, user }) => {
   const [notification, setNotification] = useState([]);
   const [allUsers, setAllUsers] = useState([]);
 
+
+  console.log("notification", notification);
+  
   // Initial socket connection
 
   useEffect(() => {
@@ -81,7 +84,9 @@ export const ChatContextProvider = ({ children, user }) => {
       } else {
         setNotification((prev) => [res, ...prev]);
       }
+      
     });
+    console.log("notification", notification);
 
     return () => {
       socket.off("getMessage");
@@ -236,7 +241,7 @@ export const ChatContextProvider = ({ children, user }) => {
     if (response.error) {
       return console.log("error " + response);
     }
-    setUserChats((prev) => [...prev, response]);
+    setUserChats((prev) => [response, ...prev]);
   }, []);
 
   const markAllNotificationsAsRead = useCallback((notifications) => {
