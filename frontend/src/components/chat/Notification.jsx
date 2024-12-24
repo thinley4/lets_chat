@@ -69,9 +69,9 @@ export function Notification() {
                 No new notifications
               </div>
             ) : (
-              modifiedUnreadNotifications.map((n) => (
+              modifiedUnreadNotifications.map((n, index) => (
                 <button
-                  key={n.senderId}
+                  key={index}
                   className={`p-4 w-full border-b ${n.isRead ? "bg-gray-100" : "bg-white"}`}
                   onClick={() => {
                     markNotificationAsRead(n, userChats, user, notification);

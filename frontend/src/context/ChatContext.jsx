@@ -69,9 +69,8 @@ export const ChatContextProvider = ({ children, user }) => {
 
     socket.on("getMessage", (res) => {
       if (currentChat?._id !== res.chatId) return;
-      
+
       setMessages((prev) => [...prev, res]);
-      
     });
 
     socket.on("getNotification", (res) => {
@@ -138,6 +137,34 @@ export const ChatContextProvider = ({ children, user }) => {
         if (response.error) {
           return setUserChatsError(response);
         }
+
+        // let notifs = notification ? notification.slice().reverse() : [];
+        // console.log("notifs", notifs);
+        
+        // let usrChats = response;
+        // console.log("usrChats", usrChats);
+        
+        // let otherUser = [];
+        // if (notifs.length > 0) {
+        //   notifs.forEach((n) => {
+        //     //recent user
+        //     const recentUser = usrChats.filter(
+        //       (chat) => chat.members.includes(n.senderId) 
+        //     );
+        //     console.log("recentUser", recentUser);
+        //     // other user
+        //     otherUser = usrChats.filter(
+        //       (chat) => !chat.members.includes(n.senderId)
+        //     );
+        //     console.log("otherUser", otherUser);
+            
+        //     otherUser.unshift(recentUser[0]);
+        //   });
+        //   setUserChats(otherUser);
+        // } else {
+        //   setUserChats(response);
+        // }
+
         setUserChats(response);
       }
     };

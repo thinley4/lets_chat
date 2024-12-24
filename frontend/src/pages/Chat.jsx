@@ -21,14 +21,13 @@ export function Chat() {
   if (!userChats) {
     return <div>No chats available</div>;
   }
-  console.log("userchats",userChats);
   
   return (
     <div className="bg-slate-600 h-screen p-16 text-white grid grid-cols-3 gap-5">
       <div className="col-span-1">
         <PotentialChat />
         {userChats?.length < 1 ? null : (
-          <div className="overflow-y-auto h-5/6 mt-7">
+          <div className="overflow-y-auto h-96 mt-7">
             {userChats.map((chat) => (
               <div
                 onClick={() => updateCurrentChat(chat)}
