@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const userRoute = require('./Routes/userRoute');
 const chatRoute = require('./Routes/chatRoute');
 const messageRouter = require('./Routes/messageRoute');
+const notificationRouter = require('./Routes/notificationRoute');
 
 require('dotenv').config();
 const port = process.env.PORT || 3000;
@@ -16,6 +17,7 @@ app.use(express.json());
 app.use('/api/users', userRoute);
 app.use('/api/chats', chatRoute);
 app.use('/api/messages', messageRouter);
+app.use('/api/notifications', notificationRouter);
 
 
 app.get('/', (req, res) => {
