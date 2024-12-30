@@ -1,6 +1,7 @@
 import { createContext, useCallback, useEffect, useState } from "react";
 import { baseUrl, getRequest, postRequest } from "../utils/services";
 import { io } from "socket.io-client";
+import { use } from "react";
 
 export const ChatContext = createContext();
 
@@ -20,9 +21,10 @@ export const ChatContextProvider = ({ children, user }) => {
   const [notification, setNotification] = useState([]);
   const [allUsers, setAllUsers] = useState([]);
 
-
   console.log("notification", notification);
+  console.log("user", user);
   
+
   // Initial socket connection
 
   useEffect(() => {
@@ -84,7 +86,15 @@ export const ChatContextProvider = ({ children, user }) => {
       } else {
         setNotification((prev) => [res, ...prev]);
       }
-      
+
+      // store in notification in db
+
+      // try {
+      //   postRequest(`${baseUrl}/notifications`, JSON.stringify(res));
+      // } catch (error) {
+      //   console.error("Error storing notification in db:", error);
+      // }
+
     });
     console.log("notification", notification);
 
@@ -93,6 +103,24 @@ export const ChatContextProvider = ({ children, user }) => {
       socket.off("getNotification");
     };
   }, [socket, currentChat]);
+
+  // Get all notifications of the user from the database
+
+  // useEffect(() => {
+  //   const fetchNotifications = async () => {
+  //     try {
+  //       const response = await getRequest(
+  //         `${baseUrl}/notifications/${user?._id}`
+  //       );
+  //       setNotification(response);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
+  //   if (user?._id) {
+  //     fetchNotifications();
+  //   }
+  // }, [user]);
 
   // Get all users except the user itself and the users with whom the user has already chatted
   useEffect(() => {
@@ -145,16 +173,16 @@ export const ChatContextProvider = ({ children, user }) => {
 
         // let notifs = notification ? notification.slice().reverse() : [];
         // console.log("notifs", notifs);
-        
+
         // let usrChats = response;
         // console.log("usrChats", usrChats);
-        
+
         // let otherUser = [];
         // if (notifs.length > 0) {
         //   notifs.forEach((n) => {
         //     //recent user
         //     const recentUser = usrChats.filter(
-        //       (chat) => chat.members.includes(n.senderId) 
+        //       (chat) => chat.members.includes(n.senderId)
         //     );
         //     console.log("recentUser", recentUser);
         //     // other user
@@ -162,7 +190,7 @@ export const ChatContextProvider = ({ children, user }) => {
         //       (chat) => !chat.members.includes(n.senderId)
         //     );
         //     console.log("otherUser", otherUser);
-            
+
         //     otherUser.unshift(recentUser[0]);
         //   });
         //   setUserChats(otherUser);
@@ -244,7 +272,7 @@ export const ChatContextProvider = ({ children, user }) => {
     setUserChats((prev) => [response, ...prev]);
   }, []);
 
-  const markAllNotificationsAsRead = useCallback((notifications) => {
+  const markAllNotificationsAsRead = useCallback(async(notifications) => {
     const mNotifications = notifications.map((n) => {
       return {
         ...n,
@@ -253,10 +281,11 @@ export const ChatContextProvider = ({ children, user }) => {
     });
 
     setNotification(mNotifications);
+
   }, []);
 
   const markNotificationAsRead = useCallback(
-    (n, userChats, user, notifications) => {
+    async(n, userChats, user, notifications) => {
       // find chat to open
 
       const desiredChat = userChats.find((chat) => {
@@ -278,6 +307,13 @@ export const ChatContextProvider = ({ children, user }) => {
       });
       updateCurrentChat(desiredChat);
       setNotification(mNotifications);
+
+      // try {
+      //   await postRequest(`${baseUrl}/notifications/markAsRead/${n._id}`);
+      // } catch (error) {
+      //   console.error('Error marking notification as read:', error);
+      // }
+
     },
     []
   );

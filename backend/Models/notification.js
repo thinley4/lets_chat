@@ -11,7 +11,7 @@ const notificationSchema = new mongoose.Schema({
     },
     date: {
         type: Date,
-        required: true
+        required: false
     }
 });
 
