@@ -20,6 +20,19 @@ const getNotifications = async(req, res) => {
     }
 }
 
+const markAllNotificationsAsRead = async(req, res) => {
+    try {
+        const notifications = await notificationModel.find({senderId: req.params.senderId});
+        notifications.forEach(async(notification) => {
+            notification.isRead = true;
+            await notification.save();
+        });
+        res.status(200).json(notifications);
+    } catch(err){
+        res.status(500).json({message: err.message});
+    }
+}
+
 const markNotificationAsRead = async(req, res) => {
     try {
         const notification = await notificationModel.findById(req.params.id);
@@ -32,4 +45,4 @@ const markNotificationAsRead = async(req, res) => {
 }
 
 
-module.exports = {createNotification, getNotifications, markNotificationAsRead};
+module.exports = {createNotification, getNotifications, markNotificationAsRead, markAllNotificationsAsRead};
